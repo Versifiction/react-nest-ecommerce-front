@@ -1,10 +1,10 @@
 const civilities = [
   {
-    value: "Monsieur",
+    value: "h",
     label: "Monsieur",
   },
   {
-    value: "Madame",
+    value: "f",
     label: "Madame",
   },
 ];
