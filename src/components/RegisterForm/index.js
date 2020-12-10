@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { registerUser } from "../../../store/actions/user";
+import { registerUser } from "../../store/actions/user";
 import { useForm } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -16,7 +16,6 @@ import Input from "@material-ui/core/Input";
 import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import FormHelperText from "@material-ui/core/FormHelperText";
 
 import civilities from "../../utils/civilities";
 
@@ -79,8 +78,7 @@ function MultilineTextFields(props) {
           id="standard-select-civility"
           name="civility"
           select
-          label="Choisir"
-          helperText="Choisissez votre civilité"
+          label="Choisir une civilité"
           inputRef={register}
         >
           {civilities.map((option) => (
@@ -100,9 +98,6 @@ function MultilineTextFields(props) {
             }}
             inputRef={register}
           />
-          <FormHelperText id="standard-email-helper-text">
-            Veuillez rentrer votre adresse e-mail
-          </FormHelperText>
         </FormControl>
         <FormControl className={clsx(classes.margin, classes.textField)}>
           <InputLabel htmlFor="standard-adornment-username">Pseudo</InputLabel>
@@ -115,9 +110,6 @@ function MultilineTextFields(props) {
             }}
             inputRef={register}
           />
-          <FormHelperText id="standard-adornment-username">
-            Veuillez rentrer votre pseudo
-          </FormHelperText>
         </FormControl>
         <FormControl className={clsx(classes.margin, classes.textField)}>
           <InputLabel htmlFor="standard-adornment-password">
@@ -141,9 +133,6 @@ function MultilineTextFields(props) {
             }
             inputRef={register}
           />
-          <FormHelperText id="standard-adornment-password">
-            Veuillez rentrer votre mot de passe
-          </FormHelperText>
         </FormControl>
         <FormControl className={clsx(classes.margin, classes.textField)}>
           <InputLabel htmlFor="standard-adornment-password">
@@ -171,10 +160,7 @@ function MultilineTextFields(props) {
             }
             inputRef={register}
           />
-          <FormHelperText id="standard-adornment-password">
-            Veuillez confirmer votre mot de passe
-          </FormHelperText>
-        </FormControl>{" "}
+        </FormControl>
         <Button variant="contained" color="primary" type="submit">
           M'inscrire
         </Button>
