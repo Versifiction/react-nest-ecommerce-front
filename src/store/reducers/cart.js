@@ -1,4 +1,6 @@
-const initialState = {};
+const initialState = {
+  products: [],
+};
 
 export default function cart(state = initialState, action) {
   switch (action.type) {

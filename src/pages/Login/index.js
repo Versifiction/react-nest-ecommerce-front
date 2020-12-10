@@ -1,18 +1,19 @@
 import React, { useEffect } from "react";
 
 import Nav from "../../components/Nav";
-import "./Home.css";
+import "./Login.css";
 
-function Accueil() {
+function Login() {
   useEffect(() => {
-    document.title = "Twister | Accueil";
+    document.title = "Twister | Connexion";
   }, []);
 
   return (
-    <div className="Home">
+    <div className="Login">
       <Nav />
+      <p>Login</p>
     </div>
   );
 }
 
-export default Accueil;
+export default Login;

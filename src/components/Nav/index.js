@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -78,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+function PrimarySearchAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -114,8 +116,20 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profil</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Mon compte</MenuItem>
+      {props.isConnected ? (
+        <MenuItem onClick={handleMenuClose}>
+          <Link to={`/user/${props.current.username}`}>Mon compte</Link>
+        </MenuItem>
+      ) : (
+        <>
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/login">Me connecter</Link>
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/register">M'inscrire</Link>
+          </MenuItem>
+        </>
+      )}
     </Menu>
   );
 
@@ -130,14 +144,6 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <ShoppingBasketIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -165,12 +171,12 @@ export default function PrimarySearchAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            RN-Products
+            RN
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
+            <IconButton aria-label="show cart products number" color="inherit">
+              <Badge badgeContent={props.products.length} color="secondary">
                 <ShoppingBasketIcon />
               </Badge>
             </IconButton>
@@ -203,3 +209,11 @@ export default function PrimarySearchAppBar() {
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  current: state.user.current,
+  isConnected: state.user.isConnected,
+  products: state.cart.products,
+});
+
+export default connect(mapStateToProps)(PrimarySearchAppBar);
