@@ -4,7 +4,7 @@ import "./Error.css";
 
 function Error() {
   useEffect(() => {
-    document.title = "Twister | 404";
+    document.title = "RN | 404";
   }, []);
 
   return (

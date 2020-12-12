@@ -11,11 +11,12 @@ import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
+import ListIcon from "@material-ui/icons/List";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -144,17 +145,20 @@ function PrimarySearchAppBar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      {props.isConnected ? (
+        <MenuItem onClick={handleMenuClose}>
+          <Link to={`/user/${props.current.username}`}>Mon compte</Link>
+        </MenuItem>
+      ) : (
+        <>
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/login">Me connecter</Link>
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/register">M'inscrire</Link>
+          </MenuItem>
+        </>
+      )}
     </Menu>
   );
 
@@ -175,21 +179,40 @@ function PrimarySearchAppBar(props) {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show cart products number" color="inherit">
-              <Badge badgeContent={props.products.length} color="secondary">
-                <ShoppingBasketIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
+            <Tooltip title="Produits" aria-label="produits">
+              <IconButton aria-label="show products" color="inherit">
+                <Badge color="secondary">
+                  <Link to="/products">
+                    <ListIcon />
+                  </Link>
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Panier" aria-label="panier">
+              <IconButton
+                aria-label="show cart products number"
+                color="inherit"
+              >
+                <Badge badgeContent={props.products.length} color="secondary">
+                  <ShoppingBasketIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              title={props.isConnected ? "Mon compte" : "Me connecter"}
+              aria-label={props.isConnected ? "compte" : "connexion"}
             >
-              <AccountCircle />
-            </IconButton>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Tooltip>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
@@ -213,7 +236,7 @@ function PrimarySearchAppBar(props) {
 const mapStateToProps = (state) => ({
   current: state.user.current,
   isConnected: state.user.isConnected,
-  products: state.cart.products,
+  products: state.products.cart,
 });
 
 export default connect(mapStateToProps)(PrimarySearchAppBar);

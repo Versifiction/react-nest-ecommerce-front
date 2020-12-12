@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Products from "./pages/Products";
 import Error from "./pages/Error";
 
 function Router() {
@@ -12,6 +13,7 @@ function Router() {
       <Route path="/" exact component={Home} />
       <Route path="/login" exact component={Login} />
       <Route path="/register" exact component={Register} />
+      <Route path="/products" exact component={Products} />
       <Route component={Error} />
     </Switch>
   );

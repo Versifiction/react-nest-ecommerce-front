@@ -5,7 +5,7 @@ import "./Home.css";
 
 function Accueil() {
   useEffect(() => {
-    document.title = "Twister | Accueil";
+    document.title = "RN | Accueil";
   }, []);
 
   return (

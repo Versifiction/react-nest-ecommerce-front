@@ -3,3 +3,8 @@ a {
   color: inherit;
   margin: inherit;
 }
+
+.subtitle {
+  text-align: center;
+  font-size: 30px;
+}

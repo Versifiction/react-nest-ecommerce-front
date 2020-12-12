@@ -1,5 +1,10 @@
+export const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART";
+export const GET_ALL_PRODUCTS = "GET_ALL_PRODUCTS";
+export const GET_CATEGORY_PRODUCT = "GET_CATEGORY_PRODUCT";
 export const GET_ERRORS = "GET_ERRORS";
+export const GET_SINGLE_PRODUCT = "GET_SINGLE_PRODUCT";
 export const GET_USER = "GET_USER";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
+export const REMOVE_PRODUCT_OF_CART = "REMOVE_PRODUCT_OF_CART";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";

@@ -5,7 +5,7 @@ import "./Login.css";
 
 function Login() {
   useEffect(() => {
-    document.title = "Twister | Connexion";
+    document.title = "RN | Connexion";
   }, []);
 
   return (
