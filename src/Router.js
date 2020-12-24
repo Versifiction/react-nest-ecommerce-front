@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Products from "./pages/Products";
+import Cart from "./pages/Cart";
 import Error from "./pages/Error";
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/login" exact component={Login} />
       <Route path="/register" exact component={Register} />
       <Route path="/products" exact component={Products} />
+      <Route path="/cart" exact component={Cart} />
       <Route component={Error} />
     </Switch>
   );

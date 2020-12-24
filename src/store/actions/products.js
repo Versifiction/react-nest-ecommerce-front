@@ -5,11 +5,24 @@ import {
   GET_ALL_PRODUCTS,
   GET_CATEGORY_PRODUCT,
   GET_SINGLE_PRODUCT,
+  LOADING_ALL_PRODUCTS,
+  LOADING_ALL_PRODUCTS_FAIL,
+  LOADING_ALL_PRODUCTS_SUCCESS,
   REMOVE_PRODUCT_OF_CART,
 } from "../constants/types";
 
+export const addProductToCart = (product) => (dispatch) => {
+  dispatch({
+    type: ADD_PRODUCT_TO_CART,
+    payload: product,
+  });
+};
+
 export const getAllProducts = () => (dispatch) => {
-  console.log("end ", process.env.REACT_APP_ENDPOINT_FAKE_STORE_API);
+  dispatch({
+    type: LOADING_ALL_PRODUCTS,
+  });
+
   axios
     .get(`${process.env.REACT_APP_ENDPOINT_FAKE_STORE_API}/products`)
     .then((res) => {
@@ -18,9 +31,14 @@ export const getAllProducts = () => (dispatch) => {
         type: GET_ALL_PRODUCTS,
         payload: res.data,
       });
+      dispatch({
+        type: LOADING_ALL_PRODUCTS_SUCCESS,
+      });
     })
     .catch((err) => {
-      console.log("err ", err);
+      dispatch({
+        type: LOADING_ALL_PRODUCTS_FAIL,
+      });
     });
 };
 
@@ -62,13 +80,6 @@ export const getCategoryProduct = (productCategory) => (dispatch) => {
     .catch((err) => {
       console.log("err ", err);
     });
-};
-
-export const addProductToCart = (product) => (dispatch) => {
-  dispatch({
-    type: ADD_PRODUCT_TO_CART,
-    payload: product,
-  });
 };
 
 export const removeProductOfCart = (product) => (dispatch) => {

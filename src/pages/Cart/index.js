@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 
 import Nav from "../../components/Nav";
-import "./Home.css";
+import "./Cart.css";
 
-function Accueil() {
+function Cart() {
   useEffect(() => {
-    document.title = "RN | Accueil";
+    document.title = "RN | Panier";
   }, []);
 
   return (
-    <div className="Home">
+    <div className="Cart">
       <Nav />
-      <p>Accueil</p>
+      <p>Panier</p>
     </div>
   );
 }
 
-export default Accueil;
+export default Cart;

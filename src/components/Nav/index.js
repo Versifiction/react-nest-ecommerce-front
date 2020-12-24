@@ -175,7 +175,7 @@ function PrimarySearchAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            RN
+            <Link to="/">RN</Link>
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
@@ -194,7 +194,9 @@ function PrimarySearchAppBar(props) {
                 color="inherit"
               >
                 <Badge badgeContent={props.products.length} color="secondary">
-                  <ShoppingBasketIcon />
+                  <Link to="/cart">
+                    <ShoppingBasketIcon />
+                  </Link>
                 </Badge>
               </IconButton>
             </Tooltip>
@@ -210,7 +212,9 @@ function PrimarySearchAppBar(props) {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <Link to="/login">
+                  <AccountCircle />
+                </Link>
               </IconButton>
             </Tooltip>
           </div>
