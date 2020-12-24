@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,46 +24,55 @@ const useStyles = makeStyles({
 
 function ImgMediaCard(props) {
   const classes = useStyles();
-  const { product } = props;
+  const {
+    addProductToCart,
+    cart,
+    product,
+    removeProductOfCart,
+    singleProduct,
+  } = props;
   const [isProductInCart, setIsProductInCart] = useState();
+  const { id } = useParams();
 
   useEffect(() => {
-    setIsProductInCart(
-      props.cart.find((cartItem) => cartItem.id === product.id)
-    );
+    setIsProductInCart(cart.find((cartItem) => cartItem.id === product.id));
   }, [props]);
 
   return (
     <Card className={classes.root} style={{ marginBottom: "20px" }}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="300"
-          image={product.image}
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {product.title.length > 20
-              ? product.title.substring(0, 20) + "..."
-              : product.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {product.description.length > 100
-              ? product.description.substring(0, 100) + "..."
-              : product.description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+      <Link to={`/product/${product.id}`}>
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            alt={`${product.title}`}
+            height="300"
+            image={product.image}
+            title={`${product.title}`}
+          />
+          <CardContent>
+            {!id && (
+              <Typography gutterBottom variant="h5" component="h2">
+                {product?.title?.length > 20
+                  ? product?.title?.substring(0, 20) + "..."
+                  : product?.title}
+              </Typography>
+            )}
+            <Typography variant="body2" color="textSecondary" component="p">
+              {product?.description?.length > 100
+                ? product?.description?.substring(0, 100) + "..."
+                : product?.description}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Link>
       <CardActions>
         <Button
           size="small"
           color={isProductInCart ? "secondary" : "primary"}
           onClick={
             isProductInCart
-              ? () => props.removeProductOfCart(product)
-              : () => props.addProductToCart(product)
+              ? () => removeProductOfCart(product)
+              : () => addProductToCart(product)
           }
         >
           {isProductInCart ? "Retirer du panier" : "Ajouter au panier"}

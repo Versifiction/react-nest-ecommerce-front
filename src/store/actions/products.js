@@ -8,6 +8,9 @@ import {
   LOADING_ALL_PRODUCTS,
   LOADING_ALL_PRODUCTS_FAIL,
   LOADING_ALL_PRODUCTS_SUCCESS,
+  LOADING_SINGLE_PRODUCT,
+  LOADING_SINGLE_PRODUCT_FAIL,
+  LOADING_SINGLE_PRODUCT_SUCCESS,
   REMOVE_PRODUCT_OF_CART,
 } from "../constants/types";
 
@@ -26,7 +29,6 @@ export const getAllProducts = () => (dispatch) => {
   axios
     .get(`${process.env.REACT_APP_ENDPOINT_FAKE_STORE_API}/products`)
     .then((res) => {
-      console.log("res data ", res.data);
       dispatch({
         type: GET_ALL_PRODUCTS,
         payload: res.data,
@@ -42,27 +44,29 @@ export const getAllProducts = () => (dispatch) => {
     });
 };
 
-export const getSingleProduct = (productId, productLimit, productSort) => (
-  dispatch
-) => {
+export const getSingleProduct = (productId) => (dispatch) => {
+  dispatch({
+    type: LOADING_SINGLE_PRODUCT,
+  });
+
   axios
     .get(
-      `${process.env.REACT_APP_ENDPOINT_FAKE_STORE_API}/products/${productId}`,
-      {
-        params: {
-          limit: productLimit,
-          sort: productSort,
-        },
-      }
+      `${process.env.REACT_APP_ENDPOINT_FAKE_STORE_API}/products/${productId}`
     )
     .then((res) => {
+      console.log("res ", res.data);
       dispatch({
         type: GET_SINGLE_PRODUCT,
         payload: res.data,
       });
+      dispatch({
+        type: LOADING_SINGLE_PRODUCT_SUCCESS,
+      });
     })
     .catch((err) => {
-      console.log("err ", err);
+      dispatch({
+        type: LOADING_SINGLE_PRODUCT_FAIL,
+      });
     });
 };
 

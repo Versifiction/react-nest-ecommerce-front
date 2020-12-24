@@ -11,7 +11,7 @@ import Product from "../../components/Product";
 import "./Products.css";
 
 function Products(props) {
-  const { getAllProducts, error, loadingAllProducts } = props;
+  const { getAllProducts, error, loadingAllProducts, products } = props;
   useEffect(() => {
     document.title = "RN | Produits";
 
@@ -37,7 +37,7 @@ function Products(props) {
                   justifyContent: "space-between",
                 }}
               >
-                {props.products.map((product, index) => (
+                {products.map((product, index) => (
                   <Product product={product} />
                 ))}
               </div>
