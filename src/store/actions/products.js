@@ -2,6 +2,7 @@ import axios from "axios";
 
 import {
   ADD_PRODUCT_TO_CART,
+  CHANGE_CART_PRODUCT_QUANTITY,
   GET_ALL_PRODUCTS,
   GET_CATEGORY_PRODUCT,
   GET_SINGLE_PRODUCT,
@@ -15,9 +16,20 @@ import {
 } from "../constants/types";
 
 export const addProductToCart = (product) => (dispatch) => {
+  const productObject = Object.assign(product, { quantity: 1 });
   dispatch({
     type: ADD_PRODUCT_TO_CART,
-    payload: product,
+    payload: productObject,
+  });
+};
+
+export const changeCartProductQuantity = (quantity, productId) => (
+  dispatch
+) => {
+  dispatch({
+    type: CHANGE_CART_PRODUCT_QUANTITY,
+    quantity,
+    productId,
   });
 };
 

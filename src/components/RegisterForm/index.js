@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MultilineTextFields(props) {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit } = useForm();
   const classes = useStyles();
   const [values, setValues] = React.useState({
     showPassword: false,

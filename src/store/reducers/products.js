@@ -1,5 +1,6 @@
 import {
   ADD_PRODUCT_TO_CART,
+  CHANGE_CART_PRODUCT_QUANTITY,
   GET_ALL_PRODUCTS,
   GET_SINGLE_PRODUCT,
   LOADING_ALL_PRODUCTS,
@@ -22,12 +23,22 @@ const initialState = {
 
 export default function products(state = initialState, action) {
   switch (action.type) {
+    case ADD_PRODUCT_TO_CART:
+      return { ...state, cart: [...state.cart, action.payload] };
+    case CHANGE_CART_PRODUCT_QUANTITY:
+      return {
+        ...state,
+        cart: state.cart.map((cart) => {
+          if (cart.id === action.productId) {
+            return { ...cart, quantity: Number(action.quantity) };
+          }
+          return cart;
+        }),
+      };
     case GET_ALL_PRODUCTS:
       return { ...state, allProducts: action.payload };
     case GET_SINGLE_PRODUCT:
       return { ...state, singleProduct: action.payload };
-    case ADD_PRODUCT_TO_CART:
-      return { ...state, cart: [...state.cart, action.payload] };
     case LOADING_ALL_PRODUCTS:
       return { ...state, loadingAllProducts: true };
     case LOADING_ALL_PRODUCTS_FAIL:

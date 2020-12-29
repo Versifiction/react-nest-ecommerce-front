@@ -1,22 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { Link } from "react-router-dom";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
 import ListIcon from "@material-ui/icons/List";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import Delete from "@material-ui/icons/Delete";
 import Tooltip from "@material-ui/core/Tooltip";
+import TextField from "@material-ui/core/TextField";
+import Popover from "@material-ui/core/Popover";
+
+import {
+  addProductToCart,
+  changeCartProductQuantity,
+  removeProductOfCart,
+} from "../../store/actions/products";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -79,15 +85,31 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  typography: {
+    padding: theme.spacing(2),
+  },
 }));
 
 function PrimarySearchAppBar(props) {
+  const { cart, changeCartProductQuantity, removeProductOfCart } = props;
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElPopover, setAnchorElPopover] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -107,60 +129,7 @@ function PrimarySearchAppBar(props) {
   };
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      {props.isConnected ? (
-        <MenuItem onClick={handleMenuClose}>
-          <Link to={`/user/${props.current.username}`}>Mon compte</Link>
-        </MenuItem>
-      ) : (
-        <>
-          <MenuItem onClick={handleMenuClose}>
-            <Link to="/login">Me connecter</Link>
-          </MenuItem>
-          <MenuItem onClick={handleMenuClose}>
-            <Link to="/register">M'inscrire</Link>
-          </MenuItem>
-        </>
-      )}
-    </Menu>
-  );
-
   const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      {props.isConnected ? (
-        <MenuItem onClick={handleMenuClose}>
-          <Link to={`/user/${props.current.username}`}>Mon compte</Link>
-        </MenuItem>
-      ) : (
-        <>
-          <MenuItem onClick={handleMenuClose}>
-            <Link to="/login">Me connecter</Link>
-          </MenuItem>
-          <MenuItem onClick={handleMenuClose}>
-            <Link to="/register">M'inscrire</Link>
-          </MenuItem>
-        </>
-      )}
-    </Menu>
-  );
 
   return (
     <div className={classes.grow}>
@@ -188,18 +157,116 @@ function PrimarySearchAppBar(props) {
                 </Badge>
               </IconButton>
             </Tooltip>
-            <Tooltip title="Panier" aria-label="panier">
-              <IconButton
-                aria-label="show cart products number"
-                color="inherit"
-              >
-                <Badge badgeContent={props.products.length} color="secondary">
-                  <Link to="/cart">
-                    <ShoppingBasketIcon />
-                  </Link>
-                </Badge>
-              </IconButton>
-            </Tooltip>
+            <IconButton aria-label="show cart products number" color="inherit">
+              <Badge badgeContent={props.products.length} color="secondary">
+                <ShoppingBasketIcon
+                  aria-describedby={id}
+                  onClick={handleClick}
+                />
+                <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorElPopover}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                >
+                  <Typography
+                    className={classes.typography}
+                    style={{ fontSize: "18px" }}
+                  >
+                    <h2 style={{ textAlign: "center" }}>Mon panier</h2>
+                    {cart.length === 0 && (
+                      <p>
+                        Vous n'avez pas encore de produits dans votre panier !
+                      </p>
+                    )}
+                    {cart &&
+                      cart.map((product) => (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginBottom: "10px",
+                          }}
+                        >
+                          <img
+                            src={product.image}
+                            alt="Produit"
+                            style={{
+                              height: "50px",
+                              width: "50px",
+                              margin: "0 8px",
+                            }}
+                          />
+                          <div
+                            style={{
+                              margin: "0 8px",
+                              width: "300px",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {product.title}
+                          </div>
+                          <div style={{ fontWeight: "bold", margin: "0 8px" }}>
+                            {product.price}€
+                          </div>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <div
+                              style={{ fontSize: "24px", fontWeight: "bold" }}
+                            >
+                              <TextField
+                                id="standard-number"
+                                type="number"
+                                InputLabelProps={{
+                                  shrink: true,
+                                }}
+                                style={{ width: "25px" }}
+                                onChange={(e) =>
+                                  changeCartProductQuantity(
+                                    e.target.value,
+                                    product.id
+                                  )
+                                }
+                                value={product.quantity}
+                              />
+                            </div>
+                            <Delete
+                              onClick={() => removeProductOfCart(product)}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    {cart.length > 0 && (
+                      <p style={{ textAlign: "right" }}>
+                        Total:&nbsp;
+                        {cart.reduce(
+                          (accum, item) => accum + item.price * item.quantity,
+                          0
+                        )}
+                        €
+                      </p>
+                    )}
+                    <br />
+                    <Link to="/cart" style={{ color: "blue" }}>
+                      <p style={{ textAlign: "center" }}>
+                        Aller sur la page du panier
+                      </p>
+                    </Link>
+                  </Typography>
+                </Popover>
+              </Badge>
+            </IconButton>
             <Tooltip
               title={props.isConnected ? "Mon compte" : "Me connecter"}
               aria-label={props.isConnected ? "compte" : "connexion"}
@@ -231,16 +298,28 @@ function PrimarySearchAppBar(props) {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
     </div>
   );
 }
 
 const mapStateToProps = (state) => ({
+  cart: state.products.cart,
   current: state.user.current,
   isConnected: state.user.isConnected,
   products: state.products.cart,
 });
 
-export default connect(mapStateToProps)(PrimarySearchAppBar);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      addProductToCart,
+      changeCartProductQuantity,
+      removeProductOfCart,
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PrimarySearchAppBar);

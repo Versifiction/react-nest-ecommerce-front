@@ -24,13 +24,7 @@ const useStyles = makeStyles({
 
 function ImgMediaCard(props) {
   const classes = useStyles();
-  const {
-    addProductToCart,
-    cart,
-    product,
-    removeProductOfCart,
-    singleProduct,
-  } = props;
+  const { addProductToCart, cart, product, removeProductOfCart } = props;
   const [isProductInCart, setIsProductInCart] = useState();
   const { id } = useParams();
 
